@@ -1,4 +1,4 @@
-# function_drawing_tool
+# FUNCTION DRAWING TOOL
 A program that takes user's input (like sin(x) * cos(x)) and draws a function of this input's expression.
 
 After running the program follow the instructions that appear. 
