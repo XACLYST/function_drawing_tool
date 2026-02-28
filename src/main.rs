@@ -86,24 +86,32 @@ impl GraphPlotter {
     }
 
     fn draw_func(&mut self, expression: &String, color: u32) {
+        let serialized_expression: meval::Expr = expression.parse().unwrap();
+        let func = serialized_expression.bind("x").unwrap();
+
+        let mut previous_pixel_y: Option<usize> = None;
+
         for pixel_x in 0..self.width {
             let x = (pixel_x as f32 - self.offset_x) / self.scale_x;
-
-            let serialized_expression: meval::Expr = expression.parse().unwrap();
-            let func = serialized_expression.bind("x").unwrap();
-
             let y = func(x as f64);
-
             let pixel_y = (self.offset_y - y as f32 * self.scale_y) as usize;
 
-            //Here calculating position for one more pixel to smoother graphic
-
-            //let additional_y = func(x as f64) - func((x + 1.0) as f64);
-            //let additional_pixel = (self.offset_y - additional_y as f32 * self.scale_y) as usize;
-
             self.draw_pixel(pixel_x, pixel_y, color);
-            self.draw_pixel(pixel_x, pixel_y + 1, color);
+            self.draw_pixel(pixel_x + 1, pixel_y + 1, color);
 
+            //There we are connecting two pixels with one line
+
+            if let Some(prev_y_val) = previous_pixel_y {
+                let start_y = prev_y_val.min(pixel_y);
+                let end_y = prev_y_val.max(pixel_y);
+
+                for y_line in start_y..=end_y {
+                    self.draw_pixel(pixel_x - 1, y_line, color);
+                    self.draw_pixel(pixel_x, y_line + 1, color);
+                }
+            }
+
+            previous_pixel_y = Some(pixel_y);
         }
     }
 }
