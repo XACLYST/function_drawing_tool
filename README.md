@@ -12,6 +12,5 @@ Those variants will lead to panic:
 Program supports such mathematical functions as:
 - Trigonometry: sin, cos, tan, tan^-1,
 - asin, acos, atan,
-- exp, ln, log10, sqrt, abs.
-
-!!!STILL IN DEVELOPMENT!!!
+- exp, ln, log10, sqrt, abs,
+- to raise to some power: ^10, ^-2.
